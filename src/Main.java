@@ -1,7 +1,6 @@
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -36,6 +35,71 @@ public class Main {
 //        problems.ascendingOrder(characters);
 //        problems.descendingOrder(characters);
 //        problems.countCharacters("I am a Nobody");
+
+        List<Employee> employees = new ArrayList<>();
+
+        employees.stream()
+                .filter(e -> e.getSalary() > 50000)
+                .collect(Collectors.toList());
+
+
+        employees.stream()
+                .sorted(Comparator.comparingInt(Employee::getAge).reversed())
+                .collect(Collectors.toList());
+
+        employees.stream()
+                .map(Employee::getDepartment)
+                .distinct()
+                .collect(Collectors.toList());
+
+        employees.stream()
+                .collect(Collectors.toMap(
+                        Employee::getId,
+                        Function.identity()
+                ));
+
+        employees.stream()
+                .collect(Collectors.groupingBy(
+                        Employee::getDepartment
+                ));
+
+        employees.stream()
+                .collect(Collectors.groupingBy(
+                        Employee::getDepartment,
+                        Collectors.averagingDouble(Employee::getSalary)
+                ));
+
+        employees.stream()
+                .collect(Collectors.groupingBy(
+                        Employee::getDepartment,
+                        Collectors.counting()
+                ));
+
+        employees.stream()
+                .collect(Collectors.groupingBy(
+                        Employee::getDepartment,
+                        Collectors.maxBy(Comparator.comparingInt(Employee::getSalary))
+                ));
+
+        employees.stream()
+                .map(Employee::getSalary)
+                .sorted()
+                .limit(2)
+                .skip(1)
+                .collect(Collectors.toList()).get(0);
+
+
+        employees.stream()
+                .sorted(Comparator.comparingInt(Employee::getSalary).reversed())
+                .limit(3)
+                .collect(Collectors.toList());
+
+        employees.stream()
+                .collect(Collectors.groupingBy(
+                        Employee::getDepartment,
+                        Collectors.minBy(Comparator.comparingInt(Employee::getAge))
+                ));
+
 
     }
 }
