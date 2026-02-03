@@ -100,6 +100,70 @@ public class Main {
                         Collectors.minBy(Comparator.comparingInt(Employee::getAge))
                 ));
 
+        employees.stream()
+                .mapToInt(Employee::getSalary)
+                .average()
+                .orElse(0);
+
+
+//        max salary
+        employees.stream()
+                .max(Comparator.comparingInt(Employee::getSalary));
+
+//        department -> List<employee names>
+        employees.stream()
+                .collect(Collectors.groupingBy(Employee::getDepartment,
+                        Collectors.mapping(Employee::getName, Collectors.toList())));
+
+//        department -> count
+        employees.stream()
+                .collect(Collectors.groupingBy(Employee::getDepartment,
+                        Collectors.counting()));
+
+//        department -> average salary
+        employees.stream()
+                .collect(Collectors.groupingBy(Employee::getDepartment,
+                        Collectors.averagingInt(Employee::getSalary)));
+
+//        department -> employee with highest salary
+        employees.stream()
+                .collect(Collectors.groupingBy(Employee::getDepartment,
+                        Collectors.maxBy(Comparator.comparingInt(Employee::getSalary))));
+
+//        second highest salary
+        employees.stream()
+                .sorted(Comparator.comparingInt(Employee::getSalary).reversed())
+                .skip(1)
+                .findFirst()
+                .orElseGet(null);
+
+        employees.stream()
+                .collect(Collectors.groupingBy(Employee::getDepartment,
+                        Collectors.collectingAndThen(
+                                Collectors.toList(),
+                                list -> list.stream()
+                                        .sorted(Comparator.comparingInt(Employee::getSalary).reversed())
+                                        .skip(1)
+                                        .findFirst()
+                                        .orElse(null)
+                        )
+                ));
+
+        employees.stream()
+                .collect(Collectors.groupingBy(Employee::getDepartment,
+                        Collectors.averagingInt(Employee::getSalary)))
+                        .entrySet()
+                        .stream()
+                        .filter(entry -> entry.getValue() > 60000)
+                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        employees.stream()
+                .collect(Collectors.groupingBy(Employee::getDepartment,
+                        Collectors.collectingAndThen(
+                            Collectors.maxBy(Comparator.comparingInt(Employee::getSalary)),
+                                opt -> opt.map(Employee::getName).orElse(null)
+                        )
+                        ));
 
     }
 }

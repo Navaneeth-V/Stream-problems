@@ -54,4 +54,12 @@ public class NumberProblems {
 
         System.out.println("Second Largest value of given List : " + value);
     }
+
+    public void squareOfEven(List<Integer> numbers) {
+        List<Integer> result = numbers.stream()
+                .filter(n -> n%2 == 0)
+                .map(n -> n * n)
+                .collect(Collectors.toList());
+    }
+
 }
